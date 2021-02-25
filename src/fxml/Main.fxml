@@ -26,12 +26,12 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
-                        <LineChart AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <LineChart fx:id="visualizer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" />
+                            <NumberAxis side="BOTTOM" fx:id="visualizerXAxis"/>
                           </xAxis>
                           <yAxis>
-                            <NumberAxis side="LEFT" />
+                            <NumberAxis side="LEFT" fx:id="visualizerYAxis"/>
                           </yAxis>
                         </LineChart>
                      </children>
