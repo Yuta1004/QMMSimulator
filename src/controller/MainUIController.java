@@ -66,7 +66,7 @@ public class MainUIController implements Initializable {
         playSweep = 0;
         simulator = new QMMSimulator(rnum, Ndim, hbar, hstep, Vpot, xInitSettings);
         xHistory = new ArrayList<SweepData>();
-        xHistory.add(simulator.getSweepData());
+        xHistory.add(simulator.getSweepData().clone());
     }
 
     @Override
@@ -158,7 +158,7 @@ public class MainUIController implements Initializable {
         if(d == 1) {
             if(playSweep == simulator.getSweepData().sweep) {
                 simulator.simulate();
-                xHistory.add(simulator.getSweepData());
+                xHistory.add(simulator.getSweepData().clone());
             }
             ++ playSweep;
         }
@@ -167,7 +167,7 @@ public class MainUIController implements Initializable {
         }
         if(d == 0) {
             xHistory.remove(playSweep);
-            xHistory.add(simulator.getSweepData());
+            xHistory.add(simulator.getSweepData().clone());
         }
         updateVisualizer();
     }

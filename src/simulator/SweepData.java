@@ -3,7 +3,7 @@ package simulator;
 /**
  * 各Sweepのデータをもつデータクラス
  */
-public class SweepData {
+public class SweepData implements Cloneable {
 
     public final int sweep, Ndim;
     public final double xave, xave2, pave, pave2;
@@ -54,4 +54,9 @@ public class SweepData {
         }
     }
 
+
+    @Override
+    public SweepData clone() {
+        return new SweepData(this.sweep, this.x.clone());
+    }
 }
