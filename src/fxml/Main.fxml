@@ -95,12 +95,7 @@
                                                       </HBox>
                                                       <HBox alignment="CENTER" spacing="20.0">
                                                          <children>
-                                                            <Button fx:id="resetBtn" mnemonicParsing="false" text="Reset">
-                                                               <font>
-                                                                  <Font size="20.0" />
-                                                               </font>
-                                                            </Button>
-                                                            <Button mnemonicParsing="false" text="Initialize">
+                                                            <Button fx:id="resetBtn" mnemonicParsing="false" prefWidth="200.0" text="Reset">
                                                                <font>
                                                                   <Font size="20.0" />
                                                                </font>
