@@ -52,7 +52,7 @@ public class MainUIController implements Initializable {
     @FXML
     private CheckBox xvalRandomC;
     @FXML
-    private Button playBtn, prevBtn, nextBtn;
+    private Button playBtn, prevBtn, nextBtn, resetBtn;
 
     // チャートUI
     @FXML
@@ -60,7 +60,7 @@ public class MainUIController implements Initializable {
     @FXML
     NumberAxis visualizerXAxis, visualizerYAxis;
 
-    public MainUIController() {
+    public void reset() {
         Ndim = 100;
         rnum = 1;
         hstep = 1.0;
@@ -127,6 +127,13 @@ public class MainUIController implements Initializable {
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });
+        resetBtn.setOnAction(event -> {
+            tl.stop();
+            playBtn.setText("▷");
+            reset();
+            updateChart(0);
+            controlPane.setDisable(false);
+        });
         playBtn.setOnAction(event -> {
             controlPane.setDisable(true);
             if(playBtn.getText().equals("▷")) {
@@ -140,6 +147,8 @@ public class MainUIController implements Initializable {
         prevBtn.setOnAction(event -> updateChart(-1));
         nextBtn.setOnAction(event -> updateChart(1));
 
+        // 画面初期化
+        reset();
         updateChart(0);
         initTimeline();
     }
