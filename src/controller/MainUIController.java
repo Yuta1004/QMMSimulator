@@ -49,7 +49,7 @@ public class MainUIController implements Initializable {
     @FXML
     private CheckBox xvalRandomC;
     @FXML
-    private Button playBtn;
+    private Button playBtn, prevBtn, nextBtn;
 
     // チャートUI
     @FXML
@@ -133,6 +133,8 @@ public class MainUIController implements Initializable {
                 playBtn.setText("▷");
             }
         });
+        prevBtn.setOnAction(event -> updateChart(-1));
+        nextBtn.setOnAction(event -> updateChart(1));
 
         updateChart(0);
         initTimeline();
@@ -162,6 +164,10 @@ public class MainUIController implements Initializable {
         }
         if(d == -1) {
             if(playSweep > 0) -- playSweep;
+        }
+        if(d == 0) {
+            xHistory.remove(playSweep);
+            xHistory.add(simulator.getSweepData());
         }
         updateVisualizer();
     }
