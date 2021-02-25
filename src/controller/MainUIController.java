@@ -70,7 +70,7 @@ public class MainUIController implements Initializable {
     @FXML
     NumberAxis visualizerXAxis, visualizerYAxis;
 
-    public void reset() {
+    public MainUIController() {
         Ndim = 100;
         rnum = 1;
         hstep = 1.0;
@@ -147,7 +147,9 @@ public class MainUIController implements Initializable {
         resetBtn.setOnAction(event -> {
             tl.stop();
             playBtn.setText("▷");
-            reset();
+            playSweep = 0;
+            simulator = new QMMSimulator(rnum, Ndim, hbar, hstep, Vpot, xInitSettings);
+            xHistory = new ArrayList<SweepData>();
             updateChart(0);
             controlPane.setDisable(false);
         });
@@ -165,7 +167,6 @@ public class MainUIController implements Initializable {
         nextBtn.setOnAction(event -> updateChart(1));
 
         // 画面初期化
-        reset();
         updateChart(0);
         initTimeline();
     }
@@ -196,7 +197,7 @@ public class MainUIController implements Initializable {
             if(playSweep > 0) -- playSweep;
         }
         if(d == 0) {
-            xHistory.remove(playSweep);
+            if(xHistory.size() > 0) xHistory.remove(playSweep);
             xHistory.add(simulator.getSweepData().clone());
         }
         sweepL.setText("Sweep: "+playSweep);
