@@ -217,7 +217,7 @@ public class MainUIController implements Initializable {
 
         // ポテンシャル
         ObservableList<Data<Double, Double>> potential = FXCollections.observableArrayList();
-        for(double x = -5.0; x <= 5.0; x += 0.5) {
+        for(double x = -5.0; x <= 5.0; x += 0.1) {
             Data<Double, Double> d = new Data<Double, Double>(x, Vpot.apply(x)*(Ndim/10));
             d.setNode(new Rectangle(0, 0));
             potential.add(d);
