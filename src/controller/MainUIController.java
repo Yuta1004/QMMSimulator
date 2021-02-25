@@ -71,7 +71,7 @@ public class MainUIController implements Initializable {
     NumberAxis visualizerXAxis, visualizerYAxis;
 
     public MainUIController() {
-        Ndim = 100;
+        Ndim = 30;
         rnum = 1;
         hstep = 1.0;
         hbar = 1.0;
