@@ -3,9 +3,9 @@ package simulator;
 public class XInitSettings {
 
     public final Tag tag;
-    public final int num;
+    public final double num;
 
-    private XInitSettings(Tag tag, int num) {
+    private XInitSettings(Tag tag, double num) {
         this.tag = tag;
         this.num = num;
     }
@@ -26,7 +26,7 @@ public class XInitSettings {
      * xを固定値で初期化する
      * @param num 固定値
      */
-    public static XInitSettings fixed(int num) {
+    public static XInitSettings fixed(double num) {
         return new XInitSettings(Tag.FIXED, num);
     }
 

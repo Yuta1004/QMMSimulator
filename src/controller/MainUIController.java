@@ -121,7 +121,7 @@ public class MainUIController implements Initializable {
             updateChart(0);
         });
         xvalC.valueProperty().addListener((__, oldV, newV) -> {
-            xInitSettings = XInitSettings.fixed(newV.intValue());
+            xInitSettings = XInitSettings.fixed((int)(newV.doubleValue()*10)/10.0);
             xvalL.setText(""+xInitSettings.num);
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
