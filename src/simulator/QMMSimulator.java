@@ -11,7 +11,7 @@ public class QMMSimulator {
 
     // パラメータ郡
     private FRandom frand;
-    private int Ndim, Nsweep = 0;
+    private int Ndim, sweep = 0;
     private double hbar, hstep;
     private Function<Double, Double> Vpot;
 
@@ -55,8 +55,9 @@ public class QMMSimulator {
      * 1Sweep分シミュレーションを実行する
      */
     public SweepData simulate() {
+        ++ sweep;
         updateXandS();
-        return new SweepData(Nsweep, x);
+        return new SweepData(sweep, x);
     }
 
     /**
