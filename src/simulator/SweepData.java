@@ -6,6 +6,7 @@ package simulator;
 public class SweepData {
 
     public final int sweep, Ndim;
+    public final double xave, xave2, pave, pave2;
     public final double x[];
     // TODO: ヒストグラムデータ
 
@@ -17,6 +18,19 @@ public class SweepData {
         this.sweep = sweep;
         this.x = x;
         this.Ndim = x.length;
+
+        double xave = 0, xave2 = 0, pave = 0, pave2 = 0;
+        for(int idx = 0; idx < Ndim; ++ idx) {
+            int lp1 = (idx+1)%Ndim;
+            xave += x[idx];
+            xave2 += Math.pow(x[idx], 2);
+            pave += x[lp1]-x[idx];
+            pave2 += Math.pow(x[lp1]-x[idx], 2);
+        }
+        this.xave = xave/Ndim;
+        this.xave2 = xave2/Ndim;
+        this.pave = pave/Ndim;
+        this.pave2 = pave2/Ndim;
     }
 
 }
