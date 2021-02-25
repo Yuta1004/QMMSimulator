@@ -129,6 +129,8 @@ public class MainUIController implements Initializable {
         xvalRandomC.selectedProperty().addListener((__, oldV, newV) -> {
             xvalL.setDisable(newV);
             xvalC.setDisable(newV);
+            rnumL.setDisable(newV);
+            rnumC.setDisable(newV);
             if(newV) {
                 xInitSettings = XInitSettings.random();
             } else {

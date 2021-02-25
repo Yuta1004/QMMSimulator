@@ -151,41 +151,6 @@
                                                                   <Separator />
                                                                   <VBox>
                                                                      <children>
-                                                                        <Label text="RandomNumber">
-                                                                           <font>
-                                                                              <Font size="30.0" />
-                                                                           </font>
-                                                                        </Label>
-                                                                        <Label text="(乱数の初期値)">
-                                                                           <font>
-                                                                              <Font size="16.0" />
-                                                                           </font>
-                                                                        </Label>
-                                                                        <HBox alignment="CENTER">
-                                                                           <children>
-                                                                              <Label fx:id="rnumL" text="1">
-                                                                                 <font>
-                                                                                    <Font name="System Bold" size="20.0" />
-                                                                                 </font>
-                                                                              </Label>
-                                                                              <Slider fx:id="rnumC" blockIncrement="1.0" max="20.0" min="-20.0" prefWidth="279.0" value="1.0">
-                                                                                 <HBox.margin>
-                                                                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                                                                 </HBox.margin>
-                                                                              </Slider>
-                                                                           </children>
-                                                                           <VBox.margin>
-                                                                              <Insets bottom="10.0" top="10.0" />
-                                                                           </VBox.margin>
-                                                                        </HBox>
-                                                                     </children>
-                                                                     <padding>
-                                                                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
-                                                                     </padding>
-                                                                  </VBox>
-                                                                  <Separator />
-                                                                  <VBox>
-                                                                     <children>
                                                                         <Label text="Hstep">
                                                                            <font>
                                                                               <Font size="30.0" />
@@ -289,6 +254,41 @@
                                                                                  </HBox.margin>
                                                                               </Slider>
                                                                            </children>
+                                                                        </HBox>
+                                                                     </children>
+                                                                     <padding>
+                                                                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                                                                     </padding>
+                                                                  </VBox>
+                                                                  <Separator />
+                                                                  <VBox>
+                                                                     <children>
+                                                                        <Label text="RandomNumber">
+                                                                           <font>
+                                                                              <Font size="30.0" />
+                                                                           </font>
+                                                                        </Label>
+                                                                        <Label text="(乱数の初期値)">
+                                                                           <font>
+                                                                              <Font size="16.0" />
+                                                                           </font>
+                                                                        </Label>
+                                                                        <HBox alignment="CENTER">
+                                                                           <children>
+                                                                              <Label fx:id="rnumL" text="1">
+                                                                                 <font>
+                                                                                    <Font name="System Bold" size="20.0" />
+                                                                                 </font>
+                                                                              </Label>
+                                                                              <Slider fx:id="rnumC" blockIncrement="1.0" max="20.0" min="-20.0" prefWidth="279.0" value="1.0">
+                                                                                 <HBox.margin>
+                                                                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                                                 </HBox.margin>
+                                                                              </Slider>
+                                                                           </children>
+                                                                           <VBox.margin>
+                                                                              <Insets bottom="10.0" top="10.0" />
+                                                                           </VBox.margin>
                                                                         </HBox>
                                                                      </children>
                                                                      <padding>
