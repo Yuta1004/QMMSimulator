@@ -16,6 +16,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
@@ -29,6 +30,7 @@ import javafx.util.Duration;
 import simulator.XInitSettings;
 import simulator.QMMSimulator;
 import simulator.SweepData;
+import statistics.Histogram;
 
 public class MainUIController implements Initializable {
 
@@ -66,9 +68,11 @@ public class MainUIController implements Initializable {
 
     // チャートUI
     @FXML
+    BarChart<String, Integer> histogramChart;
+    @FXML
     LineChart<Double, Double> visualizer;
     @FXML
-    NumberAxis visualizerXAxis, visualizerYAxis;
+    NumberAxis visualizerXAxis, visualizerYAxis, histogramChartYAxis;
 
     public MainUIController() {
         Ndim = 30;
@@ -85,6 +89,10 @@ public class MainUIController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resource) {
         // チャートUI設定
+        histogramChart.setAnimated(false);
+        histogramChartYAxis.setAutoRanging(false);
+        histogramChartYAxis.setLowerBound(0);
+        histogramChartYAxis.setTickUnit(5);
         visualizer.setAnimated(false);
         visualizer.setAxisSortingPolicy(LineChart.SortingPolicy.NONE);
         visualizerXAxis.setAutoRanging(false);
@@ -204,6 +212,7 @@ public class MainUIController implements Initializable {
         }
         sweepL.setText("Sweep: "+playSweep);
         updateVisualizer();
+        updateHistogramChart();
     }
 
     /**
@@ -233,6 +242,31 @@ public class MainUIController implements Initializable {
         visualizer.getData().clear();;
         visualizer.getData().setAll(data);
         visualizerYAxis.setUpperBound(Ndim);
+    }
+
+    /**
+     * ヒストグラムを描画する
+     */
+    private void updateHistogramChart() {
+        Histogram histogram = new Histogram(5.0, 0.1);
+        histogram.addSeries(xHistory.get(playSweep).x);
+        int hist[] = histogram.getHist();
+        double edges[] = histogram.getEdges();
+
+        int max = 0;
+        ObservableList<Data<String, Integer>> histList = FXCollections.observableArrayList();
+        for(int idx = 0; idx < edges.length; ++ idx) {
+            double edge = (int)(edges[idx]*100)/100.0;
+            histList.add(new Data<String, Integer>(""+edge, hist[idx]));
+            max = Math.max(max, hist[idx]);
+        }
+        Series<String, Integer> seriesH = new Series<String, Integer>("Histogram", histList);
+
+        ObservableList<Series<String, Integer>> data = FXCollections.observableArrayList();
+        data.add(seriesH);
+        histogramChart.getData().clear();
+        histogramChart.getData().setAll(data);
+        histogramChartYAxis.setUpperBound((max+5)/5*5);
     }
 
 }
