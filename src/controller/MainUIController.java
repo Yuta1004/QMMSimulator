@@ -17,6 +17,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
@@ -42,6 +43,8 @@ public class MainUIController implements Initializable {
     private ArrayList<SweepData> xHistory;
 
     // コントロールパネルUI
+    @FXML
+    private AnchorPane controlPane;
     @FXML
     private Label ndimL, rnumL, hstepL, hbarL, xvalL;
     @FXML
@@ -125,6 +128,7 @@ public class MainUIController implements Initializable {
             updateChart(0);
         });
         playBtn.setOnAction(event -> {
+            controlPane.setDisable(true);
             if(playBtn.getText().equals("▷")) {
                 tl.play();
                 playBtn.setText("□");
