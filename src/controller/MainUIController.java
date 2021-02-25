@@ -11,11 +11,16 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Button;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.shape.Rectangle;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.animation.Animation;
+import javafx.util.Duration;
 
 import simulator.XInitSettings;
 import simulator.QMMSimulator;
@@ -31,6 +36,7 @@ public class MainUIController implements Initializable {
 
     // シミュレータ関連
     private QMMSimulator simulator;
+    private Timeline tl;
 
     // コントロールパネルUI
     @FXML
@@ -39,6 +45,8 @@ public class MainUIController implements Initializable {
     private Slider ndimC, rnumC, hstepC, hbarC, xvalC;
     @FXML
     private CheckBox xvalRandomC;
+    @FXML
+    private Button playBtn;
 
     // チャートUI
     @FXML
@@ -110,8 +118,34 @@ public class MainUIController implements Initializable {
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart();
         });
+        playBtn.setOnAction(event -> {
+            if(playBtn.getText().equals("▷")) {
+                tl.play();
+                playBtn.setText("□");
+            } else {
+                tl.stop();
+                playBtn.setText("▷");
+            }
+        });
 
         updateChart();
+        initTimeline();
+    }
+
+    /**
+     * Timelineの初期化を行う
+     */
+    private void initTimeline() {
+        if(tl != null && tl.getStatus().equals(Animation.Status.RUNNING)) {
+            return;
+        }
+        tl = new Timeline(
+                new KeyFrame(
+                    Duration.seconds(0.5),
+                    event -> { simulator.simulate(); updateChart(); }
+                )
+            );
+        tl.setCycleCount(Timeline.INDEFINITE);
     }
 
     /**

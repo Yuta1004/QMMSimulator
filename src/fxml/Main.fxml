@@ -28,10 +28,10 @@
                      <children>
                         <LineChart fx:id="visualizer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <xAxis>
-                            <NumberAxis side="BOTTOM" fx:id="visualizerXAxis"/>
+                            <NumberAxis fx:id="visualizerXAxis" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis side="LEFT" fx:id="visualizerYAxis"/>
+                            <NumberAxis fx:id="visualizerYAxis" side="LEFT" />
                           </yAxis>
                         </LineChart>
                      </children>
@@ -70,7 +70,7 @@
                                                                   <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
                                                                </padding>
                                                             </Button>
-                                                            <Button mnemonicParsing="false" text="▷">
+                                                            <Button fx:id="playBtn" mnemonicParsing="false" text="▷">
                                                                <font>
                                                                   <Font size="25.0" />
                                                                </font>
