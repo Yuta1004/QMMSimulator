@@ -5,8 +5,8 @@ package simulator;
  */
 public class SweepData {
 
-    public int sweep, Ndim;
-    public double x[];
+    public final int sweep, Ndim;
+    public final double x[];
     // TODO: ヒストグラムデータ
 
     /**
