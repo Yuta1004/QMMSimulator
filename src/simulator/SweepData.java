@@ -33,4 +33,25 @@ public class SweepData {
         this.pave2 = pave2/Ndim;
     }
 
+    /**
+     * データの出力を行う
+     */
+    public void print() {
+        System.out.println(
+            String.format("Nswp= %d %.8e %.8e %.8e %.8e", sweep, xave, xave2, pave, pave2)
+        );
+    }
+
+    /**
+     * データの出力を行う(xも同時に出力)
+     */
+    public void printVerbose() {
+        print();
+        for(int idx = 0; idx < Ndim; ++ idx) {
+            System.out.println(
+                String.format("x_%d %d %.8e", sweep, idx, x[idx])
+            );
+        }
+    }
+
 }
