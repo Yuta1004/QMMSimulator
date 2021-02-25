@@ -55,9 +55,16 @@ public class QMMSimulator {
     /**
      * 1Sweep分シミュレーションを実行する
      */
-    public SweepData simulate() {
+    public void simulate() {
         ++ sweep;
         updateXandS();
+    }
+
+    /**
+     * 現状態のSweepDataを返す
+     * @return 現状態のSweepData
+     */
+    public SweepData getSweepData() {
         return new SweepData(sweep, x);
     }
 
