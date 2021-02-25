@@ -303,17 +303,17 @@
                                                                   <Separator />
                                                                   <VBox>
                                                                      <children>
-                                                                        <Label disable="true" text="Vpot">
+                                                                        <Label text="Vpot">
                                                                            <font>
                                                                               <Font size="30.0" />
                                                                            </font>
                                                                         </Label>
-                                                                        <Label disable="true" text="(ポテンシャル関数)">
+                                                                        <Label text="(ポテンシャル関数)">
                                                                            <font>
                                                                               <Font size="16.0" />
                                                                            </font>
                                                                         </Label>
-                                                                        <ChoiceBox disable="true" prefWidth="320.0">
+                                                                        <ChoiceBox fx:id="vpotC" prefWidth="320.0">
                                                                            <VBox.margin>
                                                                               <Insets top="10.0" />
                                                                            </VBox.margin>

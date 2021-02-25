@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
@@ -34,7 +36,13 @@ public class MainUIController implements Initializable {
     private int Ndim, rnum;
     private double hstep, hbar;
     private XInitSettings xInitSettings;
-    private Function<Double, Double> Vpot = (x) -> 0.5*x*x;
+    private Function<Double, Double> Vpot = (x) -> 0.5*Math.pow(x, 2);
+    private static TreeMap<String, Function<Double, Double>> VpotList = new TreeMap<String, Function<Double, Double>>();
+    static {
+        VpotList.put("Quadratic Function", (x) -> { return 0.5*Math.pow(x, 2); });
+        VpotList.put("Cubic Function", (x) -> { return 0.25*Math.pow(x, 4)-2*Math.pow(x, 2)+4; });
+        VpotList.put("Quartic Function", (x) -> { return Math.pow(x, 3)-3*Math.pow(x, 2)+4; });
+    };
 
     // シミュレータ関連
     private QMMSimulator simulator;
@@ -53,6 +61,8 @@ public class MainUIController implements Initializable {
     private CheckBox xvalRandomC;
     @FXML
     private Button playBtn, prevBtn, nextBtn, resetBtn;
+    @FXML
+    private ChoiceBox<String> vpotC;
 
     // チャートUI
     @FXML
@@ -125,6 +135,13 @@ public class MainUIController implements Initializable {
                 xInitSettings = XInitSettings.fixed((int)xvalC.getValue());
             }
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
+            updateChart(0);
+        });
+
+        // アニメーション操作UI
+        vpotC.getItems().setAll(VpotList.keySet());
+        vpotC.valueProperty().addListener((ov, old_val, new_val) -> {
+            Vpot = VpotList.get(new_val);
             updateChart(0);
         });
         resetBtn.setOnAction(event -> {
