@@ -3,6 +3,7 @@ package controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Function;
+import java.util.ArrayList;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,6 +38,8 @@ public class MainUIController implements Initializable {
     // シミュレータ関連
     private QMMSimulator simulator;
     private Timeline tl;
+    private int playSweep;
+    private ArrayList<SweepData> xHistory;
 
     // コントロールパネルUI
     @FXML
@@ -60,7 +63,10 @@ public class MainUIController implements Initializable {
         hstep = 1.0;
         hbar = 1.0;
         xInitSettings = XInitSettings.fixed(0);
+        playSweep = 0;
         simulator = new QMMSimulator(rnum, Ndim, hbar, hstep, Vpot, xInitSettings);
+        xHistory = new ArrayList<SweepData>();
+        xHistory.add(simulator.getSweepData());
     }
 
     @Override
@@ -81,31 +87,31 @@ public class MainUIController implements Initializable {
             Ndim = newV.intValue();
             ndimL.setText(""+Ndim);
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
-            updateChart();
+            updateChart(0);
         });
         rnumC.valueProperty().addListener((__, oldV, newV) -> {
             rnum = newV.intValue();
             rnumL.setText(""+rnum);
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
-            updateChart();
+            updateChart(0);
         });
         hstepC.valueProperty().addListener((__, oldV, newV) -> {
             hstep = (int)(newV.doubleValue()*10)/10.0;
             hstepL.setText(""+hstep);
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
-            updateChart();
+            updateChart(0);
         });
         hbarC.valueProperty().addListener((__, oldV, newV) -> {
             hbar = (int)(newV.doubleValue()*10)/10.0;
             hbarL.setText(""+hbar);
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
-            updateChart();
+            updateChart(0);
         });
         xvalC.valueProperty().addListener((__, oldV, newV) -> {
             xInitSettings = XInitSettings.fixed(newV.intValue());
             xvalL.setText(""+xInitSettings.num);
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
-            updateChart();
+            updateChart(0);
         });
         xvalRandomC.selectedProperty().addListener((__, oldV, newV) -> {
             xvalL.setDisable(newV);
@@ -116,7 +122,7 @@ public class MainUIController implements Initializable {
                 xInitSettings = XInitSettings.fixed((int)xvalC.getValue());
             }
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
-            updateChart();
+            updateChart(0);
         });
         playBtn.setOnAction(event -> {
             if(playBtn.getText().equals("▷")) {
@@ -128,7 +134,7 @@ public class MainUIController implements Initializable {
             }
         });
 
-        updateChart();
+        updateChart(0);
         initTimeline();
     }
 
@@ -136,22 +142,27 @@ public class MainUIController implements Initializable {
      * Timelineの初期化を行う
      */
     private void initTimeline() {
-        if(tl != null && tl.getStatus().equals(Animation.Status.RUNNING)) {
-            return;
-        }
-        tl = new Timeline(
-                new KeyFrame(
-                    Duration.seconds(0.5),
-                    event -> { simulator.simulate(); updateChart(); }
-                )
-            );
+        if(tl != null && tl.getStatus().equals(Animation.Status.RUNNING)) return;
+        tl = new Timeline(new KeyFrame(Duration.seconds(0.5), event -> updateChart(1)));
         tl.setCycleCount(Timeline.INDEFINITE);
     }
 
     /**
-     * Chartの一括更新を行う
+     * 画面の一括更新を行う
+     * @param d 表示中の情報からSweepをどれだけ更新するか
      */
-    private void updateChart() {
+    private void updateChart(int d) {
+        if(Math.abs(d) > 1) return;
+        if(d == 1) {
+            if(playSweep == simulator.getSweepData().sweep) {
+                simulator.simulate();
+                xHistory.add(simulator.getSweepData());
+            }
+            ++ playSweep;
+        }
+        if(d == -1) {
+            if(playSweep > 0) -- playSweep;
+        }
         updateVisualizer();
     }
 
@@ -160,7 +171,7 @@ public class MainUIController implements Initializable {
      */
     private void updateVisualizer() {
         // 量子
-        SweepData sweepData = simulator.getSweepData();
+        SweepData sweepData = xHistory.get(playSweep);
         ObservableList<Data<Double, Double>> quantumX = FXCollections.observableArrayList();
         for(int idx = 0; idx < Ndim; ++ idx) {
             quantumX.add(new Data<Double, Double>(sweepData.x[idx], (double)idx));
