@@ -16,6 +16,7 @@ public class QMMSimulator {
     private Function<Double, Double> Vpot;
 
     // 状態管理用
+    private int rejectCnt = 0;
     private double x[]; // 量子の位置情報
     private double S[]; // 作用 S(x)
 
@@ -61,11 +62,19 @@ public class QMMSimulator {
     }
 
     /**
+     * 採用率を計算して返す
+     * @return 採用率
+     */
+    public double getAcceptRatio() {
+        int acceptCnt = sweep*Ndim;
+        return (double)(acceptCnt)/(acceptCnt+rejectCnt);
+    }
+
+    /**
      * x, Sの更新処理を行う
      * @return 非採用のx_newが生成された回数
      */
-    private int updateXandS() {
-        int reject = 0;
+    private void updateXandS() {
         for(int idx = 0; idx < Ndim; ++ idx) {
             while(true){
                 double xlnew = x[idx] + hstep * (2*frand.next()-1);
@@ -77,10 +86,9 @@ public class QMMSimulator {
                     S[idx] = Snew;
                     break;
                 } else {                    // 非採用
-                    ++ reject;
+                    ++ rejectCnt;
                 }
             }
         }
-        return reject;
     }
 }
