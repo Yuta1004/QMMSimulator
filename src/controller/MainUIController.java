@@ -46,7 +46,7 @@ public class MainUIController implements Initializable {
     @FXML
     private AnchorPane controlPane;
     @FXML
-    private Label ndimL, rnumL, hstepL, hbarL, xvalL;
+    private Label ndimL, rnumL, hstepL, hbarL, xvalL, sweepL;
     @FXML
     private Slider ndimC, rnumC, hstepC, hbarC, xvalC;
     @FXML
@@ -182,6 +182,7 @@ public class MainUIController implements Initializable {
             xHistory.remove(playSweep);
             xHistory.add(simulator.getSweepData().clone());
         }
+        sweepL.setText("Sweep: "+playSweep);
         updateVisualizer();
     }
 
