@@ -53,11 +53,13 @@ public class PMMSimulator {
     }
 
     /**
-     * 1Sweep分シミュレーションを実行する
+     * 指定Sweep分シミュレーションを実行する
      */
-    public void simulate() {
-        ++ sweep;
-        updateXandS();
+    public void simulate(int skipSweep) {
+        for(int c = 0; c < skipSweep; ++ c) {
+	    ++ sweep;
+	    updateXandS();
+        }
     }
 
     /**

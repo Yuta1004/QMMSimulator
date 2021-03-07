@@ -15,12 +15,14 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
@@ -49,12 +51,14 @@ public class MainUIController implements Initializable {
     // シミュレータ関連
     private PMMSimulator simulator;
     private Timeline tl;
-    private int playSweep;
+    private int playSweep, skipSweep = 50;
     private ArrayList<SweepData> xHistory;
 
     // コントロールパネルUI
     @FXML
     private AnchorPane controlPane;
+    @FXML
+    private HBox controlHBox;
     @FXML
     private Label ndimL, rnumL, hstepL, hbarL, xvalL, sweepL;
     @FXML
@@ -65,6 +69,8 @@ public class MainUIController implements Initializable {
     private Button playBtn, prevBtn, nextBtn, resetBtn;
     @FXML
     private ChoiceBox<String> vpotC;
+    @FXML
+    private TextField skipSweepC;
 
     // チャートUI
     @FXML
@@ -154,6 +160,11 @@ public class MainUIController implements Initializable {
             Vpot = VpotList.get(new_val);
             updateChart(0);
         });
+        skipSweepC.textProperty().addListener((ov, old_val, new_val) -> {
+            try {
+                skipSweep = Integer.parseInt(new_val);
+            } catch (Exception e){}
+        });
         resetBtn.setOnAction(event -> {
             tl.stop();
             playBtn.setText("START");
@@ -162,9 +173,11 @@ public class MainUIController implements Initializable {
             xHistory = new ArrayList<SweepData>();
             updateChart(0);
             controlPane.setDisable(false);
+            controlHBox.setDisable(false);
         });
         playBtn.setOnAction(event -> {
             controlPane.setDisable(true);
+            controlHBox.setDisable(true);
             if(playBtn.getText().equals("START")) {
                 tl.play();
                 playBtn.setText("STOP");
@@ -198,16 +211,16 @@ public class MainUIController implements Initializable {
         if(Math.abs(d) > 1) return;
         if(d == 1) {
             if(playSweep == simulator.getSweepData().sweep) {
-                simulator.simulate();
+                simulator.simulate(skipSweep);
                 xHistory.add(simulator.getSweepData().clone());
             }
-            ++ playSweep;
+            playSweep += skipSweep;
         }
         if(d == -1) {
             if(playSweep > 0) -- playSweep;
         }
         if(d == 0) {
-            if(xHistory.size() > 0) xHistory.remove(playSweep);
+            if(xHistory.size() > 0) xHistory.remove(playSweep/skipSweep);
             xHistory.add(simulator.getSweepData().clone());
         }
         sweepL.setText("Sweep: "+playSweep);
@@ -220,7 +233,7 @@ public class MainUIController implements Initializable {
      */
     private void updateVisualizer() {
         // 量子
-        SweepData sweepData = xHistory.get(playSweep);
+        SweepData sweepData = xHistory.get(playSweep/skipSweep);
         ObservableList<Data<Double, Double>> quantumX = FXCollections.observableArrayList();
         for(int idx = 0; idx < Ndim; ++ idx) {
             quantumX.add(new Data<Double, Double>(sweepData.x[idx], (double)idx));
@@ -249,7 +262,7 @@ public class MainUIController implements Initializable {
      */
     private void updateHistogramChart() {
         Histogram histogram = new Histogram(5.0, 0.1);
-        histogram.addSeries(xHistory.get(playSweep).x);
+        histogram.addSeries(xHistory.get(playSweep/skipSweep).x);
         int hist[] = histogram.getHist();
         double edges[] = histogram.getEdges();
 
