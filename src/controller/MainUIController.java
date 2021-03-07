@@ -222,7 +222,7 @@ public class MainUIController implements Initializable {
             playSweep += skipSweep;
         }
         if(d == -1) {
-            if(playSweep > 0) -- playSweep;
+            if(playSweep > 0) playSweep -= skipSweep;
         }
         if(d == 0) {
             if(xHistory.size() > 0) xHistory.remove(playSweep/skipSweep);
