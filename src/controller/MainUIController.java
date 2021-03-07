@@ -161,6 +161,7 @@ public class MainUIController implements Initializable {
             parser = new ScriptParser(script);
             parser.parse();
             Vpot = (x) -> { return parser.calc(x); };
+            simulator = new PMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });
 
