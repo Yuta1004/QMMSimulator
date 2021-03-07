@@ -53,7 +53,7 @@ public class MainUIController implements Initializable {
 
     // スクリプト関連
     private ScriptParser parser;
-    private String script = "plot << 0.5*x*x";
+    private String script = "plot << 0.5*pow2(x)";
     private Function<Double, Double> Vpot = (x) -> 0.5*Math.pow(x, 2);
 
     // コントロールパネルUI

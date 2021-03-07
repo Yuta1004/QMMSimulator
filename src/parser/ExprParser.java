@@ -87,6 +87,15 @@ public class ExprParser {
         case LOG:
             return Math.log(leftVal);
 
+        case POW2:
+            return Math.pow(leftVal, 2);
+
+        case POW3:
+            return Math.pow(leftVal, 3);
+
+        case POW4:
+            return Math.pow(leftVal, 4);
+
         case VAR:
             if(var.containsKey(node.varName)) {
                 return var.get(node.varName);
@@ -187,6 +196,16 @@ public class ExprParser {
         else if(checkPrefix("log")) {
             return new Node(num(), null, NodeKind.LOG);
         }
+        else if(checkPrefix("pow2")) {
+            return new Node(num(), null, NodeKind.POW2);
+        }
+        else if(checkPrefix("pow3")) {
+            return new Node(num(), null, NodeKind.POW3);
+        }
+        else if(checkPrefix("pow4")) {
+            return new Node(num(), null, NodeKind.POW4);
+        }
+
         return num();
     }
 

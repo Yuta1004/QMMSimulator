@@ -8,5 +8,5 @@ enum NodeKind {
     ADD, SUB, MUL, DIV, LT, LTE, EQ, NEQ,
 
     /* 関数 */
-    SIN, COS, ABS, LOG;
+    SIN, COS, ABS, LOG, POW2, POW3, POW4;
 }

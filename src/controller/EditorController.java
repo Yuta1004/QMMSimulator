@@ -33,9 +33,9 @@ public class EditorController implements Initializable {
 
     public EditorController() {
         presets = new TreeMap<String, String>();
-        presets.put("Default", "plot << 0.5*x*x");
-        presets.put("Cubic Function", "plot << 0/5*x*x*x*x - 2*x*x + 4");
-        presets.put("Quartic Function", "plot << x*x*x - 3*x*x + 4");
+        presets.put("Default", "plot << 0.5*pow2(x)");
+        presets.put("Cubic Function", "plot << 0.5*pow4(x) - 2*pow2(x) + 2");
+        presets.put("Quartic Function", "plot << pow3(x) - 3*pow2(x) + 4");
     }
 
     @Override
