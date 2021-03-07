@@ -28,7 +28,7 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 
 import simulator.XInitSettings;
-import simulator.QMMSimulator;
+import simulator.PMMSimulator;
 import simulator.SweepData;
 import statistics.Histogram;
 
@@ -47,7 +47,7 @@ public class MainUIController implements Initializable {
     };
 
     // シミュレータ関連
-    private QMMSimulator simulator;
+    private PMMSimulator simulator;
     private Timeline tl;
     private int playSweep;
     private ArrayList<SweepData> xHistory;
@@ -75,13 +75,13 @@ public class MainUIController implements Initializable {
     NumberAxis visualizerXAxis, visualizerYAxis, histogramChartYAxis;
 
     public MainUIController() {
-        Ndim = 30;
+        Ndim = 100;
         rnum = 1;
         hstep = 1.0;
         hbar = 1.0;
         xInitSettings = XInitSettings.fixed(0);
         playSweep = 0;
-        simulator = new QMMSimulator(rnum, Ndim, hbar, hstep, Vpot, xInitSettings);
+        simulator = new PMMSimulator(rnum, Ndim, hbar, hstep, Vpot, xInitSettings);
         xHistory = new ArrayList<SweepData>();
         xHistory.add(simulator.getSweepData().clone());
     }
@@ -107,31 +107,31 @@ public class MainUIController implements Initializable {
         ndimC.valueProperty().addListener((__, oldV, newV) -> {
             Ndim = newV.intValue();
             ndimL.setText(""+Ndim);
-            simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
+            simulator = new PMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });
         rnumC.valueProperty().addListener((__, oldV, newV) -> {
             rnum = newV.intValue();
             rnumL.setText(""+rnum);
-            simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
+            simulator = new PMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });
         hstepC.valueProperty().addListener((__, oldV, newV) -> {
             hstep = (int)(newV.doubleValue()*10)/10.0;
             hstepL.setText(""+hstep);
-            simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
+            simulator = new PMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });
         hbarC.valueProperty().addListener((__, oldV, newV) -> {
             hbar = (int)(newV.doubleValue()*10)/10.0;
             hbarL.setText(""+hbar);
-            simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
+            simulator = new PMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });
         xvalC.valueProperty().addListener((__, oldV, newV) -> {
             xInitSettings = XInitSettings.fixed((int)(newV.doubleValue()*10)/10.0);
             xvalL.setText(""+xInitSettings.num);
-            simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
+            simulator = new PMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });
         xvalRandomC.selectedProperty().addListener((__, oldV, newV) -> {
@@ -144,7 +144,7 @@ public class MainUIController implements Initializable {
             } else {
                 xInitSettings = XInitSettings.fixed((int)xvalC.getValue());
             }
-            simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
+            simulator = new PMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });
 
@@ -156,21 +156,21 @@ public class MainUIController implements Initializable {
         });
         resetBtn.setOnAction(event -> {
             tl.stop();
-            playBtn.setText("▷");
+            playBtn.setText("START");
             playSweep = 0;
-            simulator = new QMMSimulator(rnum, Ndim, hbar, hstep, Vpot, xInitSettings);
+            simulator = new PMMSimulator(rnum, Ndim, hbar, hstep, Vpot, xInitSettings);
             xHistory = new ArrayList<SweepData>();
             updateChart(0);
             controlPane.setDisable(false);
         });
         playBtn.setOnAction(event -> {
             controlPane.setDisable(true);
-            if(playBtn.getText().equals("▷")) {
+            if(playBtn.getText().equals("START")) {
                 tl.play();
-                playBtn.setText("□");
+                playBtn.setText("STOP");
             } else {
                 tl.stop();
-                playBtn.setText("▷");
+                playBtn.setText("START");
             }
         });
         prevBtn.setOnAction(event -> updateChart(-1));

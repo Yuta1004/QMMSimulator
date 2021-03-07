@@ -21,7 +21,7 @@ public class Main extends Application {
         Scene scene = new Scene(loader.load());
 
         // Stage
-        stage.setTitle("QMMSimulator");
+        stage.setTitle("PMMSimulator");
         stage.setScene(scene);
         stage.show();
     }

@@ -1,6 +1,6 @@
-# QMM Simulator
+# PMM Simulator
 
-**Q**uantum
+**P**article
 **M**etropolis
 **M**ontecarlo
 
