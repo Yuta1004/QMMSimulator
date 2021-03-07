@@ -7,14 +7,17 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
+import javafx.stage.Modality;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.BarChart;
@@ -66,9 +69,7 @@ public class MainUIController implements Initializable {
     @FXML
     private CheckBox xvalRandomC;
     @FXML
-    private Button playBtn, prevBtn, nextBtn, resetBtn;
-    @FXML
-    private ChoiceBox<String> vpotC;
+    private Button playBtn, prevBtn, nextBtn, resetBtn, scriptEditBtn;
     @FXML
     private TextField skipSweepC;
 
@@ -153,13 +154,13 @@ public class MainUIController implements Initializable {
             simulator = new PMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });
+        scriptEditBtn.setOnAction(event -> {
+            EditorController controller = new EditorController();
+            genStage("Script Editor", "/fxml/Editor.fxml", controller).showAndWait();
+            System.out.println(controller.script);
+        });
 
         // アニメーション操作UI
-        vpotC.getItems().setAll(VpotList.keySet());
-        vpotC.valueProperty().addListener((ov, old_val, new_val) -> {
-            Vpot = VpotList.get(new_val);
-            updateChart(0);
-        });
         skipSweepC.textProperty().addListener((ov, old_val, new_val) -> {
             try {
                 skipSweep = Integer.parseInt(new_val);
@@ -280,6 +281,30 @@ public class MainUIController implements Initializable {
         histogramChart.getData().clear();
         histogramChart.getData().setAll(data);
         histogramChartYAxis.setUpperBound((max+5)/5*5);
+    }
+
+    /**
+     * 指定FXMLファイルでStageを生成して返す
+     * @param title ウィンドウタイトル
+     * @param fxmlPath FXMLファイルのパス
+     * @param controller コントローラ
+     */
+    private <T> Stage genStage(String title, String fxmlPath, T controller) {
+        // FXML読み込み
+        Scene scene = null;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            if(controller != null)
+                loader.setController(controller);
+            scene = new Scene(loader.load());
+        } catch (Exception e){ e.printStackTrace(); return null; }
+
+        // ダイアログ立ち上げ
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.setTitle(title);
+        return stage;
     }
 
 }
