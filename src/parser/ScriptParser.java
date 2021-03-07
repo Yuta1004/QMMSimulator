@@ -7,40 +7,17 @@ public class ScriptParser {
 
     private String script;
     private HashMap<String, Double> var;
-    private ArrayList<ExprParser> expr;
-    private ArrayList<Boolean> vdSetting;
+    private ExprParser expr = null;
 
     /* コンストラクタ */
     public ScriptParser(String script) {
         this.script = script;
         this.var = new HashMap<String, Double>();
-        this.expr = new ArrayList<ExprParser>();
-        this.vdSetting = new ArrayList<Boolean>();
     }
 
-    /* getGraphNum : 登録されているグラフの数を取得する */
-    public int getGraphNum() {
-        return expr.size();
-    }
-
-    /* getVDSetting : 数値積分の可視化設定を返す */
-    public boolean getVDSetting(int gID) {
-        if(gID >= vdSetting.size())
-            return false;
-        return vdSetting.get(gID);
-    }
-
-    /* calcGraph : 計算を行う */
-    public double[] calcGraph(int gID, double xArray[]) {
-        // 値チェック
-        if(gID >= this.expr.size()) return new double[0];
-
-        // 計算
-        double yArray[] = new double[xArray.length];
-        for(int idx = 0; idx < xArray.length; ++ idx) {
-            yArray[idx] = this.expr.get(gID).calc(xArray[idx]);
-        }
-        return yArray;
+    /* calc : 計算を行う */
+    public double calc(double x) {
+        return expr.calc(x);
     }
 
     /* parse : スクリプト雑パース */
@@ -66,11 +43,9 @@ public class ScriptParser {
 
             // グラフ追加
             if(line.startsWith("plot")) {
-                ExprParser ep = new ExprParser(line.split("<<")[1]);
-                ep = setVar(ep);
-                ep.parse();
-                expr.add(ep);
-                vdSetting.add(line.startsWith("plotd"));
+                expr = new ExprParser(line.split("<<")[1]);
+                expr = setVar(expr);
+                expr.parse();
                 continue;
             }
 

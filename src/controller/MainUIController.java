@@ -36,6 +36,7 @@ import simulator.XInitSettings;
 import simulator.PMMSimulator;
 import simulator.SweepData;
 import statistics.Histogram;
+import parser.ScriptParser;
 
 public class MainUIController implements Initializable {
 
@@ -43,19 +44,17 @@ public class MainUIController implements Initializable {
     private int Ndim, rnum;
     private double hstep, hbar;
     private XInitSettings xInitSettings;
-    private Function<Double, Double> Vpot = (x) -> 0.5*Math.pow(x, 2);
-    private static TreeMap<String, Function<Double, Double>> VpotList = new TreeMap<String, Function<Double, Double>>();
-    static {
-        VpotList.put("Quadratic Function", (x) -> { return 0.5*Math.pow(x, 2); });
-        VpotList.put("Cubic Function", (x) -> { return 0.25*Math.pow(x, 4)-2*Math.pow(x, 2)+4; });
-        VpotList.put("Quartic Function", (x) -> { return Math.pow(x, 3)-3*Math.pow(x, 2)+4; });
-    };
 
     // シミュレータ関連
     private PMMSimulator simulator;
     private Timeline tl;
     private int playSweep, skipSweep = 50;
     private ArrayList<SweepData> xHistory;
+
+    // スクリプト関連
+    private ScriptParser parser;
+    private String script = "plot << 0.5*x*x";
+    private Function<Double, Double> Vpot = (x) -> 0.5*Math.pow(x, 2);
 
     // コントロールパネルUI
     @FXML
@@ -156,8 +155,13 @@ public class MainUIController implements Initializable {
         });
         scriptEditBtn.setOnAction(event -> {
             EditorController controller = new EditorController();
+            controller.script = script;
             genStage("Script Editor", "/fxml/Editor.fxml", controller).showAndWait();
-            System.out.println(controller.script);
+            script = controller.script;
+            parser = new ScriptParser(script);
+            parser.parse();
+            Vpot = (x) -> { return parser.calc(x); };
+            updateChart(0);
         });
 
         // アニメーション操作UI
