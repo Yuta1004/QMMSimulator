@@ -258,7 +258,7 @@ public class MainUIController implements Initializable {
         for(int idx = 0; idx < Ndim; ++ idx) {
             quantumX.add(new Data<Double, Double>(sweepData.x[idx], (double)idx));
         }
-        Series<Double, Double> seriesQ = new Series<Double, Double>("Quantum", quantumX);
+        Series<Double, Double> seriesQ = new Series<Double, Double>("Particle", quantumX);
 
         // ポテンシャル
         ObservableList<Data<Double, Double>> potential = FXCollections.observableArrayList();
