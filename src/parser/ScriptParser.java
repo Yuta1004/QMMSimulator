@@ -17,32 +17,34 @@ public class ScriptParser {
 
     /* calc : 計算を行う */
     public double calc(double x) {
-        return expr.calc(x);
+        return expr != null ? expr.calc(x) : 0;
     }
 
     /* parse : スクリプト雑パース */
-    public void parse() {
+    public void parse() throws ParseError {
         ArrayList<Integer> loopStack = new ArrayList<Integer>();
         String splitedScript[] = script.split("\n");
 
         for(int idx = 0; idx < splitedScript.length; ++ idx) {
-            String line = splitedScript[idx];
-            line = skipSpace(line);
+            String origLine = splitedScript[idx];
+            String line = skipSpace(origLine);
 
             // 変数定義
             if(line.startsWith("var")) {
                 line = line.substring(3, line.length());
                 for(String varName: line.split(",")) {
                     varName = varName.replace(" ", "");
-                    if(checkVarName(varName)) {
-                        var.put(varName, 0.0);
-                    }
+                    checkVarName(varName);
+                    var.put(varName, 0.0);
                 }
                 continue;
             }
 
             // グラフ追加
             if(line.startsWith("plot")) {
+                if(line.split("<<").length < 2) {
+                    throw new ParseError(idx, 0, origLine, "Formula doesn't exist.");
+                }
                 expr = new ExprParser(line.split("<<")[1]);
                 expr = setVar(expr);
                 expr.parse();
@@ -51,19 +53,30 @@ public class ScriptParser {
 
             // 値代入
             if(line.contains("=")) {
+                if(line.split("=").length < 2) {
+                    throw new ParseError(idx, 0, origLine, "A right value doesn't exist.");
+                }
+
                 String left = line.split("=")[0].replace(" ", "");
                 String right = line.split("=")[1].replace(" ", "");
-                if(checkVarName(left) && var.containsKey(left)) {
-                    ExprParser ep = new ExprParser(right);
-                    ep.parse();
-                    ep = setVar(ep);
-                    var.put(left, ep.calc());
+                checkVarName(left);
+                if(!var.containsKey(left)) {
+                    throw new ParseError(idx, 0, origLine, "The variable \"" + left + "\" is not defined.");
                 }
+
+                ExprParser ep = new ExprParser(right);
+                ep.parse();
+                ep = setVar(ep);
+                var.put(left, ep.calc());
                 continue;
             }
 
             // loop
             if(line.startsWith("loop")) {
+                if(line.split(":").length < 2) {
+                    throw new ParseError(idx, 0, origLine, "A continuation condition doesn't exist.");
+                }
+
                 // 条件式
                 String expr = line.split(":")[1].replace(" ", "");
                 ExprParser ep = new ExprParser(expr);
@@ -89,6 +102,16 @@ public class ScriptParser {
                 continue;
             }
         }
+
+        // ループ対応検証
+        if(loopStack.size() != 0){
+            throw new ParseError(splitedScript.length, 0, "", "\"end\" is expected, but nothing.");
+        }
+
+        // 数式未定義検出
+        if(expr == null) {
+            throw new ParseError(splitedScript.length, 0, "", "The function has not been specified.");
+        }
     }
 
     /* skipSpace : 式先頭にある空白を読み飛ばす*/
@@ -108,11 +131,13 @@ public class ScriptParser {
     }
 
     /* checkVarName : 変数名として正しいものになっているか検証する */
-    private boolean checkVarName(String varName) {
+    private void checkVarName(String varName) throws ParseError {
         boolean result = true;
         for(char ch: varName.toCharArray()) {
             result = result && (('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') || ch == '_');
         }
-        return result;
+        if(!result) {
+            throw new ParseError(0, 0, varName, "The variable name is inappropriate. (only : a-z A-Z _)");
+        }
     }
 }

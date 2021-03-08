@@ -37,6 +37,7 @@ import simulator.QMMSimulator;
 import simulator.SweepData;
 import statistics.Histogram;
 import parser.ScriptParser;
+import parser.ParseError;
 
 public class MainUIController implements Initializable {
 
@@ -157,9 +158,15 @@ public class MainUIController implements Initializable {
             EditorController controller = new EditorController();
             controller.script = script;
             genStage("Script Editor", "/fxml/Editor.fxml", controller).showAndWait();
+
             script = controller.script;
             parser = new ScriptParser(script);
-            parser.parse();
+            try {
+                parser.parse();
+            } catch (ParseError e) {
+                System.err.println(e.getMessage());
+            }
+
             Vpot = (x) -> { return parser.calc(x); };
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
