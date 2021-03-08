@@ -163,17 +163,17 @@ public class MainUIController implements Initializable {
             parser = new ScriptParser(script);
             try {
                 parser.parse();
+                parser.calc(0.0);
             } catch (ParseError e) {
-                System.err.println(e.getMessage());
+                genStage("Error", "/fxml/Error.fxml", new ErrorController(e.getMessage())).showAndWait();
             }
 
             Vpot = (x) -> {
                 try {
                     return parser.calc(x);
                 } catch (ParseError e) {
-                    System.err.println(e.getMessage());
+                    return 0.0;
                 }
-                return 0.0;
             };
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
