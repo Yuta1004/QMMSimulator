@@ -60,7 +60,7 @@ public class EditorController implements Initializable {
 
         File file = doSave ? chooser.showSaveDialog((Stage)loadBtn.getScene().getWindow()) : chooser.showOpenDialog((Stage)loadBtn.getScene().getWindow());
         try {
-            return file == null ? new URL("file:///null") : file.toURI().toURL();
+            return file == null ? null : file.toURI().toURL();
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -68,6 +68,8 @@ public class EditorController implements Initializable {
     }
 
     private void loadScript(URL scriptURL) {
+        if(scriptURL == null) return;
+
         String line;
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(scriptURL.openStream()));
@@ -79,6 +81,8 @@ public class EditorController implements Initializable {
     }
 
     private void saveScript(URL saveURL) {
+        if(saveURL == null) return;
+
         // パス変換
         File saveFile = null;
         try {
