@@ -7,7 +7,7 @@ import simulator.XInitSettings.Tag;
 /**
  * メトロポリス法を用いたモンテカルロシミュレーションの管理・実行を行うクラス
  */
-public class PMMSimulator {
+public class QMMSimulator {
 
     // パラメータ郡
     private FRandom frand;
@@ -28,7 +28,7 @@ public class PMMSimulator {
      * @param Vpot          ポテンシャルを定義するFunction<Double, Double>
      * @param xInitSettings xの初期化設定 (XInitSettingsを使用)
      */
-    public PMMSimulator(int init_rnum, int Ndim, double hbar, double hstep,
+    public QMMSimulator(int init_rnum, int Ndim, double hbar, double hstep,
                         Function<Double, Double> Vpot, XInitSettings xInitSettings) {
         frand = new FRandom(init_rnum);
         this.Ndim = Ndim;
