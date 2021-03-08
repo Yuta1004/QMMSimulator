@@ -167,7 +167,14 @@ public class MainUIController implements Initializable {
                 System.err.println(e.getMessage());
             }
 
-            Vpot = (x) -> { return parser.calc(x); };
+            Vpot = (x) -> {
+                try {
+                    return parser.calc(x);
+                } catch (ParseError e) {
+                    System.err.println(e.getMessage());
+                }
+                return 0.0;
+            };
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });

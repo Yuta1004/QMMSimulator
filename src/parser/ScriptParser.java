@@ -16,7 +16,7 @@ public class ScriptParser {
     }
 
     /* calc : 計算を行う */
-    public double calc(double x) {
+    public double calc(double x) throws ParseError {
         return expr != null ? expr.calc(x) : 0;
     }
 

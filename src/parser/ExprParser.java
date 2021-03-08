@@ -21,17 +21,17 @@ public class ExprParser {
     }
 
     /* parse :式のパースを行う */
-    public void parse() {
+    public void parse() throws ParseError {
         root = expr();
     }
 
     /* calc : 式の計算を行う */
-    public double calc() {
+    public double calc() throws ParseError {
         return calcChild(root);
     }
 
     /* calc(double x) : 式の計算を行う(変数xを指定) */
-    public double calc(double x) {
+    public double calc(double x) throws ParseError {
         setVar("x", x);
         return calc();
     }
@@ -43,7 +43,7 @@ public class ExprParser {
     }
 
     /* calcChild : 構文木を辿りつつ計算を行う */
-    private double calcChild(Node node) {
+    private double calcChild(Node node) throws ParseError {
         if(node == null) return 0;
         if(node.kind == NodeKind.NUM) return node.value;
 
@@ -108,12 +108,12 @@ public class ExprParser {
     }
 
     /* expr = add */
-    private Node expr() {
+    private Node expr() throws ParseError {
         return eval();
     }
 
     /* eval = add (">" add | ">=" add | "==" add | "!=" add)? */
-    private Node eval() {
+    private Node eval() throws ParseError {
         Node node = add();
 
         if(checkPrefix(">=")) {
@@ -138,7 +138,7 @@ public class ExprParser {
     }
 
     /* add = mul ("+" mul | "-" mul)* */
-    private Node add() {
+    private Node add() throws ParseError {
         Node node = mul();
 
         while(true) {
@@ -156,7 +156,7 @@ public class ExprParser {
     }
 
     /* mul = unary ("*" unary | "-" unary)* */
-    private Node mul() {
+    private Node mul() throws ParseError {
         Node node = unary();
 
         while(true) {
@@ -174,7 +174,7 @@ public class ExprParser {
     }
 
     /* unary = ("+" | "-")* func */
-    private Node unary() {
+    private Node unary() throws ParseError {
         checkPrefix("+");
         if(checkPrefix("-")) {
             return new Node(new Node(0), func(), NodeKind.SUB);
@@ -183,7 +183,7 @@ public class ExprParser {
     }
 
     /* func = ("sin" | "cos")? num */
-    private Node func() {
+    private Node func() throws ParseError {
         if(checkPrefix("sin")) {
             return new Node(num(), null, NodeKind.SIN);
         }
@@ -210,7 +210,7 @@ public class ExprParser {
     }
 
     /* num = 数 | "(" expr ")" */
-    private Node num() {
+    private Node num() throws ParseError {
         if(checkPrefix("(")) {
             Node node = expr();
             checkPrefix(")");
@@ -226,7 +226,7 @@ public class ExprParser {
     }
 
     /* getNum : 式の先頭から字を読み取る */
-    private double getNum() {
+    private double getNum() throws ParseError {
         // 有効な数字が続く長さを調べる
         skipSpace();
         int idx = 0;
@@ -237,9 +237,14 @@ public class ExprParser {
         }
 
         // 対象範囲を数字に変換
-        double num = Double.parseDouble(expr.substring(0, idx));
-        expr = expr.substring(idx, expr.length());
-        return num;
+        String strNum = expr.substring(0, idx);
+        try {
+            double num = Double.parseDouble(strNum);
+            expr = expr.substring(idx, expr.length());
+            return num;
+        } catch (Exception e) {
+            throw new ParseError(0, 0, strNum, "\"" + strNum + "\" is not valid number.");
+        }
     }
 
     /* getVarName ; 式の先頭から変数名を取り出す */
@@ -265,7 +270,7 @@ public class ExprParser {
     }
 
     /* checkPrefix : 式の先頭の文字列をチェックする */
-    private boolean checkPrefix(String prefix) {
+    private boolean checkPrefix(String prefix) throws ParseError {
         skipSpace();
         if(expr.startsWith(prefix)) {
             expr = expr.substring(prefix.length(), expr.length());
