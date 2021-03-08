@@ -33,9 +33,10 @@ public class EditorController implements Initializable {
 
     public EditorController() {
         presets = new TreeMap<String, String>();
-        presets.put("Default", "plot << 0.5*pow2(x)");
-        presets.put("Cubic Function", "plot << 0.5*pow4(x) - 2*pow2(x) + 2");
-        presets.put("Quartic Function", "plot << pow3(x) - 3*pow2(x) + 4");
+        presets.put("Default A", "var a\na = 0.5\nplot << a*pow2(x)");
+        presets.put("Default B", "var a, b, c\na = 0.5\nb = -2\nc = 2\nplot << a*pow4(x) + b*pow2(x) + c");
+        presets.put("Default C", "var a, b, c\na = 1\nb = -3\nc = 4\nplot << a*pow3(x) + b*pow2(x) + c");
+        presets.put("Script Syntax", "// A variable \"x\" will be automatically assigned at runtime.\n// A token \"plot\" is is used to define functions. (Last one will be enable!)\nplot << sin(x)\n\n//You can define arbitrary variables by using a token \"var\".\nvar a\n\n// You can also make assignments to variables.\n// Uninitialized or undefined variables will be treated as 0.\na = 10\n\n// A variety of functions can be used.\nplot << sin(x)\nplot << cos(x)\nplot << abs(x)\nplot << log(x)\nplot << pow2(x)\nplot << pow3(x)\nplot << pow4(x)\n\n// By using \"loop\", you can use the iterate function for your calculations.\nvar c, sum\nc = 0\nsum = 0\nloop: c < 5\n    sum = sum + c\n    c = c + 1\nend");
     }
 
     @Override
