@@ -243,7 +243,7 @@ public class MainUIController implements Initializable {
             if(xHistory.size() > 0) xHistory.remove(playSweep/skipSweep);
             xHistory.add(simulator.getSweepData().clone());
         }
-        sweepL.setText("Sweep: "+playSweep);
+        sweepL.setText(""+playSweep);
         updateVisualizer();
         updateHistogramChart();
     }
