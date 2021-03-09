@@ -81,7 +81,7 @@ public class QMMSimulator {
     }
 
     /**
-     * x, Sの更新処理を行う
+     * x, S(x)の更新処理を行う
      * @return 非採用のx_newが生成された回数
      */
     private void updateXandS() {
@@ -98,7 +98,7 @@ public class QMMSimulator {
                     S[idx] = Knew + Vnew;
                     Ssum += S[idx];
                     Ksum += Knew;
-                    Vnew += Vnew;
+                    Vsum += Vnew;
                     break;
                 } else {                    // 非採用
                     ++ rejectCnt;
