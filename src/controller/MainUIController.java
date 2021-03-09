@@ -249,9 +249,9 @@ public class MainUIController implements Initializable {
         // 画面更新処理
         SweepData viewingData = xHistory.get(playSweep/skipSweep);
         sweepL.setText(""+playSweep);
-        kL.setText(""+viewingData.Ksum);
-        vL.setText(""+viewingData.Vsum);
-        sL.setText(""+viewingData.Ssum);
+        kL.setText(""+(int)(viewingData.Ksum*10)/10.0);
+        vL.setText(""+(int)(viewingData.Vsum*10)/10.0);
+        sL.setText(""+(int)(viewingData.Ssum*10)/10.0);
         updateVisualizer();
         updateHistogramChart();
     }
