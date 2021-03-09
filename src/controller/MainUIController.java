@@ -63,7 +63,7 @@ public class MainUIController implements Initializable {
     @FXML
     private HBox controlHBox;
     @FXML
-    private Label ndimL, rnumL, hstepL, hbarL, xvalL, sweepL, kL, vL, sL;
+    private Label ndimL, rnumL, hstepL, hbarL, hbarL2, xvalL, sweepL, kL, vL, sL;
     @FXML
     private Slider ndimC, rnumC, hstepC, hbarC, xvalC;
     @FXML
@@ -132,6 +132,7 @@ public class MainUIController implements Initializable {
         hbarC.valueProperty().addListener((__, oldV, newV) -> {
             hbar = (int)(newV.doubleValue()*10)/10.0;
             hbarL.setText(""+hbar);
+            hbarL2.setText(""+hbar);
             simulator = new QMMSimulator(rnum, Ndim, hstep, hbar, Vpot, xInitSettings);
             updateChart(0);
         });
