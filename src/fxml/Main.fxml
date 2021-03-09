@@ -34,9 +34,9 @@
                             <NumberAxis fx:id="visualizerYAxis" side="LEFT" />
                           </yAxis>
                         </LineChart>
-                        <VBox alignment="TOP_CENTER" spacing="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                        <VBox alignment="TOP_RIGHT" spacing="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <children>
-                              <HBox>
+                              <HBox alignment="TOP_RIGHT">
                                  <children>
                                     <Label text="Sweep: ">
                                        <font>
@@ -57,7 +57,7 @@
                                           <Font size="25.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="sweepL1" text="0">
+                                    <Label fx:id="kL" text="0">
                                        <font>
                                           <Font size="25.0" />
                                        </font>
@@ -71,7 +71,7 @@
                                           <Font size="25.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="sweepL11" text="0">
+                                    <Label fx:id="vL" text="0">
                                        <font>
                                           <Font size="25.0" />
                                        </font>
@@ -85,7 +85,7 @@
                                           <Font size="25.0" />
                                        </font>
                                     </Label>
-                                    <Label fx:id="sweepL111" text="0">
+                                    <Label fx:id="sL" text="0">
                                        <font>
                                           <Font size="25.0" />
                                        </font>

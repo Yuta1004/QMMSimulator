@@ -63,7 +63,7 @@ public class MainUIController implements Initializable {
     @FXML
     private HBox controlHBox;
     @FXML
-    private Label ndimL, rnumL, hstepL, hbarL, xvalL, sweepL;
+    private Label ndimL, rnumL, hstepL, hbarL, xvalL, sweepL, kL, vL, sL;
     @FXML
     private Slider ndimC, rnumC, hstepC, hbarC, xvalC;
     @FXML
@@ -228,6 +228,7 @@ public class MainUIController implements Initializable {
      * @param d 表示中の情報からSweepをどれだけ更新するか
      */
     private void updateChart(int d) {
+        // シミュレートの実行
         if(Math.abs(d) > 1) return;
         if(d == 1) {
             if(playSweep == simulator.getSweepData().sweep) {
@@ -243,7 +244,13 @@ public class MainUIController implements Initializable {
             if(xHistory.size() > 0) xHistory.remove(playSweep/skipSweep);
             xHistory.add(simulator.getSweepData().clone());
         }
+
+        // 画面更新処理
+        SweepData viewingData = xHistory.get(playSweep/skipSweep);
         sweepL.setText(""+playSweep);
+        kL.setText(""+viewingData.Ksum);
+        vL.setText(""+viewingData.Vsum);
+        sL.setText(""+viewingData.Ssum);
         updateVisualizer();
         updateHistogramChart();
     }
