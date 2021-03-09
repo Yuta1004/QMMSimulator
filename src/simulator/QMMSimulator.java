@@ -19,7 +19,7 @@ public class QMMSimulator {
     private int rejectCnt = 0;
     private double x[]; // 量子の位置情報
     private double S[]; // 作用 S(x)
-    private double Ssum, Ksum, Vsum; // 作用, 運動エネルギー, ポテンシャルエネルギー
+    private double Ksum, Vsum; // 運動エネルギー, ポテンシャルエネルギー
 
     /**
      * @param init_rnum     乱数の初期値
@@ -68,7 +68,12 @@ public class QMMSimulator {
      * @return 現状態のSweepData
      */
     public SweepData getSweepData() {
-        return new SweepData(sweep, x, Ssum, Ksum, Vsum);
+        if(Vsum == 0) {
+            for(int idx = 0; idx < Ndim; ++ idx) {
+                Vsum += Vpot.apply(x[idx]);
+            }
+        }
+        return new SweepData(sweep, x, Ksum+Vsum, Ksum, Vsum);
     }
 
     /**
@@ -85,7 +90,7 @@ public class QMMSimulator {
      * @return 非採用のx_newが生成された回数
      */
     private void updateXandS() {
-        Ssum = 0; Ksum = 0; Vsum = 0;
+        Ksum = 0; Vsum = 0;
         for(int idx = 0; idx < Ndim; ++ idx) {
             while(true){
                 double xlnew = x[idx] + hstep * (2*frand.next()-1);
@@ -96,7 +101,6 @@ public class QMMSimulator {
                 if(Schk > frand.next()) {   // 採用
                     x[idx] = xlnew;
                     S[idx] = Knew + Vnew;
-                    Ssum += S[idx];
                     Ksum += Knew;
                     Vsum += Vnew;
                     break;
