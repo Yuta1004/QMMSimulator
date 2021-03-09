@@ -207,8 +207,16 @@ public class MainUIController implements Initializable {
                 playBtn.setText("START");
             }
         });
-        prevBtn.setOnAction(event -> updateChart(-1));
-        nextBtn.setOnAction(event -> updateChart(1));
+        prevBtn.setOnAction(event -> {
+            updateChart(-1);
+            controlPane.setDisable(true);
+            controlHBox.setDisable(true);
+        });
+        nextBtn.setOnAction(event -> {
+            updateChart(1);
+            controlPane.setDisable(true);
+            controlHBox.setDisable(true);
+        });
 
         // 画面初期化
         updateChart(0);
