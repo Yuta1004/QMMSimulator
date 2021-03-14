@@ -20,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -33,6 +34,7 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
@@ -102,6 +104,12 @@ public class MainUIController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resource) {
+        // スプラッシュ表示
+        Stage splash = genStage("", "/fxml/Credit.fxml", new SplashController());
+        splash.getScene().setFill(Color.TRANSPARENT);
+        splash.initStyle(StageStyle.TRANSPARENT);
+        splash.showAndWait();
+
         // チャートUI設定
         histogramChart.setAnimated(false);
         histogramChartYAxis.setAutoRanging(false);
