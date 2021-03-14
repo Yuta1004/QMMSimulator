@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2021 Yuta Nakagami
+ *
+ * Released under the MIT license.
+ * see https://opensource.org/licenses/MIT
+ */
+
 import java.io.IOException;
 
 import javafx.application.Application;
