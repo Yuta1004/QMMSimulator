@@ -7,7 +7,7 @@ ARGS =
 OPTS := -p $(JAVAFX_PATH)/lib --add-modules $(JAVAFX_MODULES)
 JAVA_OPTS := $(OPTS) -classpath bin
 JAVAC_OPTS := $(OPTS) -sourcepath src -d bin
-JLINK_OPTS := --compress=2 --add-modules $(JAVAFX_MODULES) --module-path $(JAVAFX_PATH)/jmods
+JLINK_OPTS := --compress=2 --add-modules $(JAVAFX_MODULES) --module-path $(JAVAFX_JMODS_PATH)
 
 run: Main.class
 	cp -r src/fxml bin
@@ -41,7 +41,7 @@ define gen-dist
 	rm -rf fxml 
 
 	# JRE生成
-	$(JLINK) $(JLINK_OPTS):$(JMODS_PATH) --output dist/runtime-$1
+	$(JLINK) $(JLINK_OPTS):$(JDK_JMODS_PATH) --output dist/runtime-$1
 
 	# Makefile生成
 	echo "$1:\n\tchmod +x runtime-$1/bin/*\n\truntime-$1/bin/$2 -jar Quantum-$1.jar\n\n" > dist/Makefile
