@@ -5,6 +5,8 @@
  * see https://opensource.org/licenses/MIT
  */
 
+/* このプログラムは3年前に京都大学の方から譲り受けたものを参考にして新しく書き下したものです */
+
 package simulator;
 
 import java.util.function.Function;
