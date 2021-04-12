@@ -26,7 +26,7 @@
                <children>
                   <VBox alignment="CENTER">
                      <children>
-                        <Label text="弓削商船">
+                        <Label text="弓削商船高等専門学校">
                            <font>
                               <Font size="20.0" />
                            </font>
