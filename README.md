@@ -1,6 +1,3 @@
-# QMM Simulator
+# Quantum
 
-**Q**uantum
-**M**etropolis
-**M**ontecarlo
-
+量子力学
