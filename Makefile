@@ -37,20 +37,26 @@ define gen-dist
 	# ビルド
 	javac $(JAVAC_OPTS) src/Main.java
 	cp -r src/fxml .
-	jar cvfm dist/Quantum-$1.jar MANIFEST.MF -C bin . fxml
-	rm -rf fxml 
+	jar cvfm dist/Quantum.jar MANIFEST.MF -C bin . fxml
+	rm -rf fxml
 
 	# JRE生成
 	$(JLINK) $(JLINK_OPTS):$(JMODS_PATH) --output dist/runtime-$1
 
-	# Makefile生成
-	echo "$1:\n\tchmod +x runtime-$1/bin/*\n\truntime-$1/bin/$2 -jar Quantum-$1.jar\n\n" > dist/Makefile
+	# Launcher生成
+	if [ $1 = "win" ]; then \
+		echo ".\\\runtime-$1\\\bin\\\java.exe -jar Quantum.jar" > dist/run.bat && \
+		chmod +x dist/run.bat;\
+	else \
+		echo "./runtime-$1/bin/java -jar Quantum.jar" > dist/run.sh && \
+		chmod +x dist/run.sh;\
+	fi
 
 	# README生成
-	echo "# Quantum ($1)\n\n## HowToUse\nrun \`make\`" > dist/README.md
+	echo "# Quantum ($1)\n\n## HowToUse\nrun the launcher(.bat, .sh)" > dist/README.md
 
 	# LICENCEコピー
-	cp LICENCE dist	
+	cp LICENCE dist
 
 	# .class削除
 	rm -rf bin
